@@ -14,35 +14,6 @@ def dbg(a):
     sys.stderr.write(f"{info.filename}:{info.function}:{info.lineno}: {a}\n")
 
 
-def parse(v, i):
-    dent = indent(v, i)
-    j = i + 1
-    while indent(v, j) > dent:
-        j += 1
-    return v[i:j]
-
-
-def indent(v, i):
-    if i == len(v):
-        return -1
-    s = v[i]
-    j = 0
-    while s[j] == " ":
-        j += 1
-    if s[j] == "\n":
-        return 1000000
-    if s[j] == "\t":
-        raise Exception("file indented with tabs")
-    return j
-
-
-def is_def(v, i):
-    if i == len(v):
-        return
-    s = v[i]
-    return s.lstrip().startswith("def ")
-
-
 def do(filename):
     if args.verbose:
         print(filename, end=": ")
@@ -76,6 +47,35 @@ def flatten(ds):
     for d in ds:
         v.extend(d)
     return v
+
+
+def indent(v, i):
+    if i == len(v):
+        return -1
+    s = v[i]
+    j = 0
+    while s[j] == " ":
+        j += 1
+    if s[j] == "\n":
+        return 1000000
+    if s[j] == "\t":
+        raise Exception("file indented with tabs")
+    return j
+
+
+def is_def(v, i):
+    if i == len(v):
+        return
+    s = v[i]
+    return s.lstrip().startswith("def ")
+
+
+def parse(v, i):
+    dent = indent(v, i)
+    j = i + 1
+    while indent(v, j) > dent:
+        j += 1
+    return v[i:j]
 
 
 for f in args.files:
