@@ -14,10 +14,10 @@ def dbg(a):
     sys.stderr.write(f"{info.filename}:{info.function}:{info.lineno}: {a}\n")
 
 
-def do(filename):
+def do(file):
     if args.verbose:
-        print(filename, end=": ")
-    v = open(filename, encoding="utf-8").readlines()
+        print(file, end=": ")
+    v = open(file, encoding="utf-8").readlines()
     old = v.copy()
     i = 0
     while i < len(v):
@@ -39,7 +39,7 @@ def do(filename):
     else:
         if args.verbose:
             print("sorted")
-        open(filename, "w", newline="\n").writelines(v)
+        open(file, "w", newline="\n").writelines(v)
 
 
 def flatten(ds):
@@ -80,6 +80,6 @@ def parse(v, i):
 
 for f in args.files:
     for root, dirs, files in os.walk(f):
-        for filename in files:
-            if os.path.splitext(filename)[1] == ".py":
-                do(os.path.join(root, filename))
+        for file in files:
+            if os.path.splitext(file)[1] == ".py":
+                do(os.path.join(root, file))
