@@ -36,7 +36,10 @@ def indent(v, i):
     return j
 
 
-def is_def(s):
+def is_def(v, i):
+    if i == len(v):
+        return
+    s = v[i]
     return s.lstrip().startswith("def ")
 
 
@@ -45,16 +48,20 @@ def do(filename):
         print(filename, end=": ")
     v = open(filename, encoding="utf-8").readlines()
     old = v.copy()
-    for i in range(len(v)):
-        if is_def(v[i]):
+    i = 0
+    while i < len(v):
+        if is_def(v, i):
             j = i
             ds = []
-            while is_def(v[j]):
+            while is_def(v, j):
                 d = parse(v, j)
                 j += len(d)
                 ds.append(d)
             ds.sort()
             v[i:j] = flatten(ds)
+            i = j
+        else:
+            i += 1
     if v == old:
         if args.verbose:
             print("unchanged")
