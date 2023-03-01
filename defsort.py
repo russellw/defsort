@@ -7,11 +7,62 @@ parser.add_argument("files", nargs="*")
 args = parser.parse_args()
 
 
+def end(v, dent, i):
+    dent1 = indent(v, i)
+    if dent1 < dent:
+        return True
+    if dent1 == dent and is_def(v[i]):
+        return True
+
+
+def parse(v, i):
+    dent = indent(v, i)
+    j = i + 1
+    while not end(v, dent, i):
+        j += 1
+    return v[i:j]
+
+
+def indent(v, i):
+    if i == len(v):
+        return -1
+    s = v[i]
+    j = 0
+    while j < len(s) and s[j] == " ":
+        j += 1
+    if j == len(s):
+        return 1000000
+    if s[j] == "\t":
+        raise Exception("file indented with tabs")
+    return j
+
+
+def is_def(s):
+    return s.lstrip().startswith("def ")
+
+
 def do(filename):
     if args.verbose:
         print(filename)
-    v = [s.rstrip() for s in open(filename, encoding="utf-8")]
+    v = open(filename, encoding="utf-8").readlines()
+    for i in range(len(v)):
+        if is_def(v[i]):
+            j = i
+            ds = []
+            while is_def(v[j]):
+                d = parse(v, j)
+                j += len(d)
+                ds.append(d)
+            ds.sort()
+            v[i:j] = flatten(ds)
     print(v)
+
+
+def flatten(ds):
+    v = []
+    for d in ds:
+        v.extend(d)
+    return v
 
 
 for f in args.files:
