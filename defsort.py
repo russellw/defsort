@@ -18,7 +18,7 @@ def end(v, dent, i):
     dent1 = indent(v, i)
     if dent1 < dent:
         return True
-    if dent1 == dent and is_def(v[i]):
+    if dent1 == dent and not is_def(v[i]):
         return True
 
 
