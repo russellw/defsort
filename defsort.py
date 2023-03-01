@@ -7,6 +7,11 @@ parser.add_argument("files", nargs="*")
 args = parser.parse_args()
 
 
+def dbg(a):
+    info = inspect.getframeinfo(inspect.currentframe().f_back)
+    sys.stderr.write(f"{info.filename}:{info.function}:{info.lineno}: {a}\n")
+
+
 def end(v, dent, i):
     dent1 = indent(v, i)
     if dent1 < dent:
