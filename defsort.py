@@ -14,18 +14,10 @@ def dbg(a):
     sys.stderr.write(f"{info.filename}:{info.function}:{info.lineno}: {a}\n")
 
 
-def end(v, dent, i):
-    dent1 = indent(v, i)
-    if dent1 < dent:
-        return True
-    if dent1 == dent and not is_def(v[i]):
-        return True
-
-
 def parse(v, i):
     dent = indent(v, i)
     j = i + 1
-    while not end(v, dent, j):
+    while indent(v, j) > dent:
         j += 1
     return v[i:j]
 
