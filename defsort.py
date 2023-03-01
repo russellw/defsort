@@ -43,8 +43,9 @@ def is_def(s):
 
 def do(filename):
     if args.verbose:
-        print(filename)
+        print(filename, end=": ")
     v = open(filename, encoding="utf-8").readlines()
+    old = v.copy()
     for i in range(len(v)):
         if is_def(v[i]):
             j = i
@@ -55,7 +56,13 @@ def do(filename):
                 ds.append(d)
             ds.sort()
             v[i:j] = flatten(ds)
-    print(v)
+    if v == old:
+        if args.verbose:
+            print("unchanged")
+    else:
+        if args.verbose:
+            print("sorted")
+        open(filename, "w", newline="\n").writelines(v)
 
 
 def flatten(ds):
