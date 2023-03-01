@@ -1,5 +1,7 @@
 import argparse
+import inspect
 import os
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--verbose", action="count", help="increase output verbosity")
@@ -23,7 +25,7 @@ def end(v, dent, i):
 def parse(v, i):
     dent = indent(v, i)
     j = i + 1
-    while not end(v, dent, i):
+    while not end(v, dent, j):
         j += 1
     return v[i:j]
 
@@ -33,9 +35,9 @@ def indent(v, i):
         return -1
     s = v[i]
     j = 0
-    while j < len(s) and s[j] == " ":
+    while s[j] == " ":
         j += 1
-    if j == len(s):
+    if s[j] == "\n":
         return 1000000
     if s[j] == "\t":
         raise Exception("file indented with tabs")
